@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KCE &middot; Direction B &middot; The Corridor</title>
+<style>
+/*FONT*/
+
+:root{
+  --navy:#07151F;
+  --navy-2:#0D2231;
+  --navy-3:#153047;
+  --steel:#8FA6B4;
+  --steel-2:#B9C9D3;
+  --paper:#F6F4EF;
+  --paper-2:#EFEDE6;
+  --ink:#0B1B26;
+  --body:#41535E;
+  --line:#DCD8CE;
+  --line-dk:#1B3346;
+  --green:#2E9E55;
+  --green-dk:#1C7A3E;
+  --green-lt:#7FD39B;
+  --green-btn:#19703A;
+  --green-btn-h:#135A2D;
+  --cta-bg:#166633;
+
+  --gut: clamp(20px, 5vw, 72px);
+  --max: 1320px;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--body);
+  font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16.5px; line-height:1.65; font-weight:450;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{max-width:100%}
+a{color:inherit}
+h1,h2,h3,h4{color:var(--ink); margin:0; font-weight:700; letter-spacing:-.03em; line-height:1.1}
+p{margin:0}
+.tnum{font-variant-numeric:tabular-nums lining-nums}
+.wrap{max-width:var(--max); margin:0 auto; padding-inline:var(--gut)}
+
+.kicker{
+  font-size:11px; font-weight:800; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--green-dk); display:block;
+}
+.kicker.lt{color:var(--green-lt)}
+
+.btn{
+  display:inline-flex; align-items:center; gap:10px; text-decoration:none; white-space:nowrap;
+  background:var(--green-btn); color:#fff; font-weight:700; font-size:15px;
+  padding:14px 22px; border:1.5px solid var(--green-btn); border-radius:40px;
+  transition:background .22s, border-color .22s, transform .22s, box-shadow .22s;
+}
+.btn:hover{background:var(--green-btn-h); border-color:var(--green-btn-h); transform:translateY(-2px); box-shadow:0 10px 22px -12px rgba(25,112,58,.8)}
+.btn .arw{transition:transform .25s}
+.btn:hover .arw{transform:translateX(4px)}
+.btn.lg{padding:17px 28px; font-size:16px}
+.btn.outline{background:transparent; color:var(--ink); border-color:#C9C4B8}
+.btn.outline:hover{background:var(--ink); border-color:var(--ink); color:#fff; box-shadow:none}
+.btn.outline-lt{background:transparent; color:#fff; border-color:rgba(255,255,255,.3)}
+.btn.outline-lt:hover{background:rgba(255,255,255,.1); border-color:#fff; box-shadow:none}
+
+/* ============ HEADER ============ */
+.topbar{background:#04101A; color:var(--steel); font-size:12.5px}
+.topbar .wrap{display:flex; justify-content:space-between; align-items:center; gap:20px; min-height:40px; flex-wrap:wrap}
+.topbar .locs{display:flex; gap:22px; flex-wrap:wrap}
+.topbar strong{color:#DCE6EC; font-weight:600}
+.lang{display:flex; gap:4px}
+.lang a{text-decoration:none; padding:3px 9px; border-radius:40px; font-weight:600}
+.lang a[aria-current]{background:rgba(255,255,255,.12); color:#fff}
+
+header.site{background:var(--navy); position:sticky; top:0; z-index:60; border-bottom:1px solid var(--line-dk)}
+header.site .wrap{display:flex; align-items:center; gap:clamp(18px,3vw,46px); min-height:82px}
+.brand{display:flex; align-items:center; gap:12px; text-decoration:none; flex:none}
+.brand .mark{width:36px; height:40px; flex:none}
+.brand .wm{display:flex; flex-direction:column; line-height:1}
+.brand .wm b{font-size:18px; font-weight:800; color:#fff; letter-spacing:-.025em}
+.brand .wm span{font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--steel); margin-top:5px; font-weight:700}
+
+nav.main{display:flex; gap:clamp(14px,1.7vw,26px); margin-left:auto; align-items:center}
+nav.main a{text-decoration:none; font-size:14.5px; font-weight:600; color:var(--steel-2); white-space:nowrap; transition:color .2s; position:relative; padding:8px 0}
+nav.main a:hover,nav.main a[aria-current]{color:#fff}
+nav.main a[aria-current]::after{content:""; position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--green)}
+
+.hdr-end{display:flex; align-items:center; gap:18px; flex:none}
+.tel{text-decoration:none; font-size:15px; font-weight:700; color:#fff; white-space:nowrap}
+.tel small{display:block; font-size:9.5px; letter-spacing:.17em; text-transform:uppercase; color:var(--steel); font-weight:700; margin-bottom:2px}
+.burger{display:none; margin-left:auto; width:44px; height:44px; border:1px solid var(--line-dk); background:var(--navy-2); border-radius:40px; position:relative; cursor:pointer}
+.burger i{position:absolute; left:12px; right:12px; height:1.5px; background:#fff}
+.burger i:nth-child(1){top:15px} .burger i:nth-child(2){top:21px} .burger i:nth-child(3){top:27px}
+
+/* ============ HERO ============ */
+.hero{
+  background:var(--navy); color:var(--steel-2); position:relative; overflow:hidden;
+  padding-block:clamp(48px,5.5vw,80px) clamp(104px,10vw,132px);
+}
+/* the coverage map IS the hero's atmosphere */
+.hero .mapbg{
+  position:absolute; top:50%; left:52%; width:min(1180px,105%); transform:translate(-50%,-48%);
+  opacity:.5; pointer-events:none;
+}
+.hero .mapbg path{fill:#0E2435; stroke:#07151F; stroke-width:1.2}
+.hero .mapbg path.on{fill:#17405C}
+.hero .mapbg path.hq{fill:#2E9E55; opacity:.85}
+.hero::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(70% 85% at 18% 42%, rgba(7,21,31,.97) 0%, rgba(7,21,31,.72) 46%, rgba(7,21,31,0) 78%),
+    linear-gradient(180deg, rgba(7,21,31,.55) 0%, rgba(7,21,31,0) 28%, rgba(7,21,31,.9) 100%);
+}
+.hero .wrap{position:relative; z-index:2}
+.hero-in{max-width:54ch}
+.ping{display:inline-flex; align-items:center; gap:10px; border:1px solid rgba(127,211,155,.3); background:rgba(46,158,85,.12); color:var(--green-lt); border-radius:40px; padding:8px 15px; font-size:11.5px; font-weight:800; letter-spacing:.14em; text-transform:uppercase}
+.ping i{width:7px; height:7px; border-radius:50%; background:var(--green-lt); position:relative}
+.ping i::after{content:""; position:absolute; inset:-5px; border-radius:50%; border:1px solid var(--green-lt); animation:rip 2.4s ease-out infinite}
+@keyframes rip{0%{transform:scale(.5); opacity:.8} 75%{transform:scale(1.7); opacity:0} 100%{opacity:0}}
+
+h1{
+  color:#fff; font-size:clamp(36px,4.6vw,60px); line-height:1.04; letter-spacing:-.04em; max-width:20ch;
+  margin:26px 0 0; font-weight:800; text-wrap:balance;
+}
+h1 em{font-style:normal; color:var(--green-lt)}
+.sub{font-size:clamp(17px,1.55vw,20px); line-height:1.58; margin-top:24px; max-width:44ch; color:var(--steel-2)}
+.hero-cta{display:flex; gap:14px; flex-wrap:wrap; margin-top:34px}
+.hero-sig{margin-top:30px; padding-top:22px; border-top:1px solid var(--line-dk); font-size:14.5px; color:var(--steel); max-width:46ch}
+.hero-sig b{color:#fff; font-weight:700}
+
+/* proof ribbon, overlapping the hero and the section below */
+.ribbon{margin-top:clamp(-96px,-8vw,-70px); position:relative; z-index:5}
+.ribbon .inner{
+  background:#fff; border:1px solid var(--line); border-radius:4px;
+  box-shadow:0 26px 60px -34px rgba(11,27,38,.55);
+  display:grid; grid-template-columns:repeat(4,1fr);
+}
+.pf{padding:clamp(22px,2.4vw,30px); border-right:1px solid var(--line)}
+.pf:last-child{border-right:0}
+.pf b{display:block; font-size:clamp(30px,3.4vw,44px); color:var(--ink); font-weight:800; letter-spacing:-.045em; line-height:1}
+.pf b em{font-style:normal; font-size:.48em; color:var(--green-dk); margin-left:2px}
+.pf span{display:block; margin-top:10px; font-size:13.5px; line-height:1.45; color:var(--body)}
+
+/* ============ CREDENTIALS STRIP ============ */
+.credstrip{padding-block:clamp(34px,3.6vw,48px)}
+.credstrip .inner{display:flex; gap:clamp(14px,2vw,26px); align-items:center; flex-wrap:wrap}
+.credstrip .ttl{font-size:11px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; color:#6F6A5E; flex:none}
+.cred{
+  display:inline-flex; align-items:center; gap:9px; text-decoration:none;
+  border:1px solid var(--line); background:#fff; border-radius:40px; padding:9px 16px;
+  font-size:13.5px; font-weight:600; color:var(--ink); transition:.22s;
+}
+.cred:hover{border-color:var(--green); color:var(--green-dk); transform:translateY(-2px)}
+.cred i{width:16px; height:16px; border-radius:50%; background:var(--green); flex:none; display:grid; place-items:center}
+.cred i svg{width:9px; height:9px; stroke:#fff; fill:none; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round}
+.cred.prog{border-style:dashed; color:#6F6959}
+.cred.prog i{background:transparent; border:1.5px dashed #B6AE9A}
+.cred.prog i svg{display:none}
+
+/* ============ SECTIONS ============ */
+.sec{padding-block:clamp(60px,7.5vw,112px)}
+.sec-hd{max-width:62ch; margin-bottom:clamp(36px,4.4vw,60px)}
+.sec-hd h2{font-size:clamp(30px,4vw,54px); margin-top:16px; letter-spacing:-.038em; text-wrap:balance}
+.sec-hd p{margin-top:20px; font-size:17px; line-height:1.62}
+
+/* healthcare services: an editorial numbered list, not cards */
+.svclist{border-top:1px solid var(--line)}
+.svc{
+  display:grid; grid-template-columns:auto minmax(0,.9fr) minmax(0,1.1fr) auto;
+  gap:clamp(18px,3vw,44px); align-items:center;
+  padding-block:clamp(24px,2.6vw,34px); border-bottom:1px solid var(--line);
+  text-decoration:none; position:relative; transition:padding-inline .3s;
+}
+.svc::before{
+  content:""; position:absolute; inset:0 -16px; border-radius:4px; background:#fff; opacity:0;
+  transition:opacity .3s; z-index:-1;
+  box-shadow:0 16px 40px -28px rgba(11,27,38,.5);
+}
+.svc:hover::before{opacity:1}
+.svc:hover{padding-inline:16px}
+.svc .n{font-size:12.5px; font-weight:800; color:var(--green-dk); letter-spacing:.1em; width:34px; flex:none}
+.svc h3{font-size:clamp(19px,2vw,26px); letter-spacing:-.03em; line-height:1.18}
+.svc p{font-size:15px; line-height:1.55}
+.svc .chev{
+  width:42px; height:42px; border-radius:50%; border:1.5px solid var(--line); flex:none;
+  display:grid; place-items:center; transition:.3s;
+}
+.svc .chev svg{width:15px; height:15px; stroke:var(--ink); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; transition:.3s}
+.svc:hover .chev{background:var(--green); border-color:var(--green); transform:rotate(-45deg)}
+.svc:hover .chev svg{stroke:#fff}
+
+/* ============ INDUSTRIES ============ */
+.industries{background:var(--paper-2)}
+.igrid{display:grid; grid-template-columns:repeat(12,1fr); gap:clamp(14px,1.6vw,20px)}
+.ind{
+  grid-column:span 3; background:#fff; border:1px solid var(--line); border-radius:4px;
+  padding:clamp(22px,2.4vw,30px); text-decoration:none; display:flex; flex-direction:column; gap:14px;
+  transition:.3s; position:relative; overflow:hidden; min-height:200px;
+}
+.ind:hover{transform:translateY(-4px); border-color:#C9C4B8; box-shadow:0 22px 48px -30px rgba(11,27,38,.5)}
+.ind .ic{width:46px; height:46px; border-radius:12px; background:var(--paper-2); display:grid; place-items:center; flex:none; transition:.3s}
+.ind .ic svg{width:23px; height:23px; stroke:var(--green-dk); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round}
+.ind:hover .ic{background:var(--green); }
+.ind:hover .ic svg{stroke:#fff}
+.ind h3{font-size:19px; letter-spacing:-.025em; line-height:1.25}
+.ind p{font-size:14.5px; line-height:1.5}
+.ind .tag{margin-top:auto; padding-top:12px; font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:#6F6A5E}
+/* flagship breaks the grid */
+.ind.flag{grid-column:span 6; background:var(--navy); border-color:var(--navy); color:var(--steel-2)}
+.ind.flag h3{color:#fff; font-size:clamp(21px,2.3vw,28px)}
+.ind.flag .ic{background:rgba(255,255,255,.08)}
+.ind.flag .ic svg{stroke:var(--green-lt)}
+.ind.flag .tag{color:var(--green-lt)}
+.ind.proven{grid-column:span 6}
+.ind.proven .big{font-size:clamp(34px,3.6vw,46px); font-weight:800; color:var(--ink); letter-spacing:-.045em; line-height:1}
+
+/* ============ VERIFY (dark) ============ */
+.verify{background:var(--navy); color:var(--steel-2); position:relative; overflow:hidden}
+.verify::before{
+  content:""; position:absolute; inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(100% 70% at 70% 0%,#000,transparent 70%);
+  -webkit-mask-image:radial-gradient(100% 70% at 70% 0%,#000,transparent 70%);
+}
+.verify .wrap{position:relative}
+.verify .sec-hd h2{color:#fff}
+.verify .sec-hd p{color:var(--steel-2)}
+.vgrid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.92fr); gap:clamp(32px,4.5vw,72px); align-items:start}
+.steps{counter-reset:s}
+.step{display:grid; grid-template-columns:auto 1fr; gap:20px; padding-block:24px; border-bottom:1px solid var(--line-dk)}
+.step:first-child{border-top:1px solid var(--line-dk)}
+.step .num{
+  counter-increment:s; width:38px; height:38px; border-radius:50%; border:1px solid var(--line-dk);
+  display:grid; place-items:center; font-size:12.5px; font-weight:800; color:var(--green-lt); flex:none;
+}
+.step .num::before{content:"0" counter(s)}
+.step h3{color:#fff; font-size:19px; margin-bottom:8px; letter-spacing:-.025em}
+.step p{font-size:15px; line-height:1.56; color:var(--steel)}
+
+.report{background:#fff; border-radius:6px; overflow:hidden; box-shadow:0 34px 70px -40px rgba(0,0,0,.8); position:sticky; top:106px}
+.rep-hd{padding:18px 22px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; gap:14px; background:var(--paper)}
+.rep-hd b{display:block; font-size:15px; color:var(--ink)}
+.rep-hd div span{font-size:12px; color:#6F6959}
+.pill{font-size:10.5px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; padding:6px 11px; border-radius:40px; background:rgba(46,158,85,.12); color:var(--green-dk); border:1px solid rgba(46,158,85,.3); white-space:nowrap}
+.pill.warn{background:#F8F1DE; color:#7D5F0F; border-color:#E6D9B6}
+.rep-body{padding:20px 22px 22px}
+.bar{margin-bottom:16px}
+.bar:last-child{margin-bottom:0}
+.bar .bl{display:flex; justify-content:space-between; gap:12px; font-size:13.5px; margin-bottom:8px; color:var(--body)}
+.bar .bl b{color:var(--ink); font-weight:800}
+.bar .tr{display:block; height:7px; background:var(--paper-2); border-radius:40px; overflow:hidden}
+.bar .fl{display:block; height:100%; background:linear-gradient(90deg,var(--green),#3FBE6B); border-radius:40px; width:0; animation:grow 1.15s cubic-bezier(.2,.75,.3,1) forwards}
+.bar.amber .fl{background:linear-gradient(90deg,#C79A1E,#DDB33A)}
+@keyframes grow{to{width:var(--w)}}
+.rep-ft{padding:15px 22px; background:var(--paper); border-top:1px solid var(--line); font-size:12.5px; color:#6F6959}
+
+/* ============ COVERAGE ============ */
+.cov .wrap{display:grid; grid-template-columns:minmax(0,.54fr) minmax(0,1fr); gap:clamp(28px,4vw,60px); align-items:center}
+.usmap{width:100%; height:auto; display:block}
+.usmap path{fill:#E4E1D8; stroke:var(--paper); stroke-width:1.2; transition:fill .35s}
+.usmap path.on{fill:#9FCDB1}
+.usmap path.hq{fill:var(--green)}
+.cov-key{display:flex; gap:20px; flex-wrap:wrap; margin-top:22px; font-size:13.5px; color:#6F6959}
+.cov-key i{display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:8px; vertical-align:-1px}
+.offices{margin-top:26px; display:grid; gap:12px}
+.office{background:#fff; border:1px solid var(--line); border-radius:4px; padding:15px 17px}
+.office b{display:block; color:var(--ink); font-size:15.5px}
+.office span{font-size:13.5px; color:#6F6959}
+
+/* ============ HELD ============ */
+.held{border:1.5px dashed #CBC5B7; border-radius:6px; padding:clamp(28px,3.6vw,44px); text-align:center; background:#fff}
+.held .pill{display:inline-block; margin-bottom:16px}
+.held h3{font-size:22px; margin-bottom:10px}
+.held p{font-size:15px; max-width:58ch; margin-inline:auto}
+
+/* ============ CTA ============ */
+.cta{background:var(--cta-bg); color:#D6F0E0; position:relative; overflow:hidden}
+.cta::before{content:""; position:absolute; width:720px; height:720px; border-radius:50%; background:radial-gradient(circle,rgba(255,255,255,.12),transparent 62%); top:-320px; right:-180px}
+.cta .wrap{position:relative; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:clamp(28px,4vw,60px); align-items:center; padding-block:clamp(52px,6vw,86px)}
+.cta h2{color:#fff; font-size:clamp(28px,3.7vw,48px); letter-spacing:-.038em; text-wrap:balance; margin-top:16px}
+.cta p{margin-top:18px; font-size:17px; max-width:50ch}
+.cta .btn{background:#fff; color:var(--green-dk); border-color:#fff}
+.cta .btn:hover{background:var(--paper); border-color:var(--paper); box-shadow:none}
+.cta-side{display:flex; flex-direction:column; gap:14px; align-items:flex-start}
+
+/* ============ FOOTER ============ */
+footer.site{background:var(--navy); color:var(--steel)}
+footer.site .wrap{padding-block:clamp(44px,5vw,66px) 0}
+.fgrid{display:grid; grid-template-columns:minmax(0,1.3fr) repeat(3,minmax(0,1fr)); gap:clamp(24px,3vw,46px)}
+.fgrid h4{color:#fff; font-size:11px; letter-spacing:.2em; text-transform:uppercase; margin-bottom:18px; font-weight:800}
+.fgrid ul{list-style:none; margin:0; padding:0; display:grid; gap:10px; font-size:14.5px}
+.fgrid a{text-decoration:none; transition:color .2s}
+.fgrid a:hover{color:#fff}
+.fbrand p{margin-top:18px; font-size:14.5px; max-width:34ch; line-height:1.6}
+.fbot{margin-top:clamp(34px,4vw,52px); border-top:1px solid var(--line-dk); padding-block:22px 28px; display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap; font-size:12.5px; color:#718696}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1100px){
+  .igrid{grid-template-columns:repeat(6,1fr)}
+  .ind.flag,.ind.proven{grid-column:span 6}
+  .ind{grid-column:span 3}
+  .ribbon .inner{grid-template-columns:repeat(2,1fr)}
+  .pf:nth-child(2){border-right:0}
+  .pf:nth-child(1),.pf:nth-child(2){border-bottom:1px solid var(--line)}
+}
+@media (max-width:900px){
+  nav.main,.hdr-end .tel{display:none}
+  .burger{display:block}
+  .hdr-end{margin-left:auto}
+  .svc{grid-template-columns:auto 1fr; gap:14px 18px}
+  .svc p{grid-column:2}
+  .svc .chev{display:none}
+  .vgrid{grid-template-columns:1fr}
+  .report{position:static}
+  .cov .wrap{grid-template-columns:1fr}
+  .cta .wrap{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:repeat(2,1fr)}
+  .hero .mapbg{opacity:.3; width:160%}
+}
+.l-sm{display:none}
+@media (max-width:760px){
+  .l-full{display:none} .l-sm{display:inline}
+  /* at 390px the brand, the CTA and the burger together overran the bar */
+  header.site .wrap{gap:10px}
+  .brand .wm b{font-size:16px}
+  .brand .mark{width:32px; height:36px}
+  .hdr-end{gap:10px}
+  .hdr-end .btn{padding:11px 16px; font-size:13.5px; gap:7px}
+  .burger{width:40px; height:40px}
+  .burger i{left:11px; right:11px}
+  .burger i:nth-child(1){top:13px} .burger i:nth-child(2){top:19px} .burger i:nth-child(3){top:25px}
+}
+@media (max-width:620px){
+  .topbar .locs{display:none}
+  .igrid{grid-template-columns:1fr}
+  .ind,.ind.flag,.ind.proven{grid-column:span 1}
+  .ribbon .inner{grid-template-columns:1fr}
+  .pf{border-right:0; border-bottom:1px solid var(--line)}
+  .pf:last-child{border-bottom:0}
+  .pf:nth-child(2){border-bottom:1px solid var(--line)}
+  .fgrid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="locs">
+      <span>Corporate office: <strong>Dallas, TX</strong></span>
+      <span>Mid-Atlantic office: <strong>Winchester, VA</strong></span>
+    </div>
+    <div class="lang"><a href="#" aria-current="true">EN</a><a href="#">ES</a></div>
+  </div>
+</div>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="#">
+      <svg class="mark" viewBox="0 0 36 40" aria-hidden="true">
+        <path d="M18 1.8 34 7.4v14C34 29.8 27.3 36.4 18 38.4 8.7 36.4 2 29.8 2 21.4v-14Z" fill="none" stroke="#7FD39B" stroke-width="2.2" stroke-linejoin="round"/>
+        <path d="M11 19.6 18 12.6l7 7M11 26.6l7-7 7 7" fill="none" stroke="#7FD39B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="wm"><b>Knight Clean</b><span>Enterprises</span></span>
+    </a>
+    <nav class="main">
+      <a href="#" aria-current="page">Healthcare</a>
+      <a href="#">Industries</a>
+      <a href="#">Quality</a>
+      <a href="#">Credentials</a>
+      <a href="#">Case Studies</a>
+      <a href="#">Leadership</a>
+    </nav>
+    <div class="hdr-end">
+      <a class="tel" href="tel:+19725213360"><small>National</small>(972) 521&#8209;3360</a>
+      <a class="btn" href="#"><span class="l-full">Request an assessment</span><span class="l-sm">Assessment</span> <span class="arw">&rarr;</span></a>
+    </div>
+    <button class="burger" aria-label="Menu"><i></i><i></i><i></i></button>
+  </div>
+</header>
+
+<section class="hero">
+  <!--MAPBG-->
+  <div class="wrap">
+    <div class="hero-in">
+      <span class="ping"><i></i>Healthcare-grade &middot; 20 states</span>
+      <h1>Healthcare-grade facility services, delivered in <em>20 states</em>.</h1>
+      <p class="sub">Specialized and multi-site cleaning for organizations where standards matter, from hospitals and clinics to retail networks and critical facilities.</p>
+      <div class="hero-cta">
+        <a class="btn lg" href="#">Request a facility risk assessment <span class="arw">&rarr;</span></a>
+        <a class="btn lg outline-lt" href="#">How we verify</a>
+      </div>
+      <p class="hero-sig"><b>National reach. Local accountability.</b> Every site has a named KCE supervisor, the same standards and the same monthly report.</p>
+    </div>
+  </div>
+</section>
+
+<div class="ribbon">
+  <div class="wrap">
+    <div class="inner">
+      <div class="pf"><b class="tnum">16<em>+</em></b><span>Years delivering facility services</span></div>
+      <div class="pf"><b class="tnum">20</b><span>States with service delivered</span></div>
+      <div class="pf"><b class="tnum">539</b><span>Stores on our largest multi-site programme</span></div>
+      <div class="pf"><b class="tnum">1</b><span>Named KCE supervisor at every site</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="credstrip">
+  <div class="wrap">
+    <div class="inner">
+      <span class="ttl">Credentials</span>
+      <a class="cred" href="#"><i><svg viewBox="0 0 12 12"><path d="M2 6.4 4.6 9 10 3.4"/></svg></i>CHEST-certified technicians</a>
+      <a class="cred" href="#"><i><svg viewBox="0 0 12 12"><path d="M2 6.4 4.6 9 10 3.4"/></svg></i>CDC Project Firstline trained</a>
+      <a class="cred" href="#"><i><svg viewBox="0 0 12 12"><path d="M2 6.4 4.6 9 10 3.4"/></svg></i>OSHA compliant</a>
+      <a class="cred" href="#"><i><svg viewBox="0 0 12 12"><path d="M2 6.4 4.6 9 10 3.4"/></svg></i>ASHE ICRA 2.0</a>
+      <a class="cred prog" href="#"><i></i>ISSA CIMS &middot; in progress</a>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap sec" style="padding-top:clamp(20px,2vw,32px)">
+    <div class="sec-hd">
+      <span class="kicker">Healthcare services</span>
+      <h2>The work hospitals cannot afford to get wrong.</h2>
+      <p>Healthcare is the standard we work to, not the only market we serve. These five services are where infection prevention, construction risk and patient throughput meet.</p>
+    </div>
+
+    <div class="svclist">
+      <a class="svc" href="#">
+        <span class="n">01</span>
+        <h3>Construction and renovation cleaning (ICRA)</h3>
+        <p>Containment-aware cleaning alongside active construction, from barrier maintenance through final clearance before the unit reopens.</p>
+        <span class="chev"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+      </a>
+      <a class="svc" href="#">
+        <span class="n">02</span>
+        <h3>OR and terminal cleaning</h3>
+        <p>Between-case and terminal cleaning to a written sequence, timed against the OR schedule rather than against a shift.</p>
+        <span class="chev"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+      </a>
+      <a class="svc" href="#">
+        <span class="n">03</span>
+        <h3>Outbreak response</h3>
+        <p>Escalated disinfection on call, with product, contact time and room sequence recorded for infection prevention.</p>
+        <span class="chev"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+      </a>
+      <a class="svc" href="#">
+        <span class="n">04</span>
+        <h3>Shared mobile equipment cleaning</h3>
+        <p>Pumps, workstations and portable imaging cleaned on a tracked cycle, so equipment that moves between rooms stops moving contamination with it.</p>
+        <span class="chev"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+      </a>
+      <a class="svc" href="#">
+        <span class="n">05</span>
+        <h3>Outpatient site standardization</h3>
+        <p>One protocol, one report and one standard across every clinic in the network, however far it sits from the main campus.</p>
+        <span class="chev"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="industries">
+  <div class="wrap sec">
+    <div class="sec-hd">
+      <span class="kicker">Industries served</span>
+      <h2>Same standards, applied to your sector.</h2>
+      <p>Each sector gets a page written for it. The protocols, the verification and the reporting do not change.</p>
+    </div>
+
+    <div class="igrid">
+      <a class="ind flag" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="M12 7.5v9M7.5 12h9"/></svg></span>
+        <h3>Healthcare</h3>
+        <p>Hospitals, surgical centres, medical office buildings and outpatient networks. ICRA, OR turnover, outbreak response and shared equipment.</p>
+        <span class="tag">Flagship &rarr;</span>
+      </a>
+      <a class="ind proven" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 9h18l-1.5 11H4.5Z"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/></svg></span>
+        <h3>Multi-site retail and pharmacy</h3>
+        <span class="big tnum">539 stores &middot; 20 states</span>
+        <p>One cooler and food-safety programme delivered on a single standard across a national footprint.</p>
+        <span class="tag">Proven &rarr;</span>
+      </a>
+      <a class="ind" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M9 3v7L4 20a1.6 1.6 0 0 0 1.4 2h13.2A1.6 1.6 0 0 0 20 20l-5-10V3"/><path d="M8 3h8M7.2 14h9.6"/></svg></span>
+        <h3>Labs and life sciences</h3>
+        <p>Controlled environments, documented cycles and access-controlled areas.</p>
+        <span class="tag">View &rarr;</span>
+      </a>
+      <a class="ind" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M10 21v-6h4v6"/></svg></span>
+        <h3>Commercial</h3>
+        <p>Offices and mixed-use property held to clinical standards.</p>
+        <span class="tag">View &rarr;</span>
+      </a>
+      <a class="ind" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 8.5 12 4l9 4.5-9 4.5Z"/><path d="M7 11v5c0 1.7 2.2 3 5 3s5-1.3 5-3v-5"/></svg></span>
+        <h3>Education</h3>
+        <p>Campuses and school districts, term-time and break schedules.</p>
+        <span class="tag">View &rarr;</span>
+      </a>
+      <a class="ind" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5.2 3.8 9.4 9 10 5.2-.6 9-4.8 9-10V6Z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <h3>Critical facilities</h3>
+        <p>Data centres and utilities with escorted access and clearance.</p>
+        <span class="tag">View &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="verify">
+  <div class="wrap sec">
+    <div class="sec-hd">
+      <span class="kicker lt">Quality &amp; verification</span>
+      <h2>We measure the clean, then hand you the record.</h2>
+      <p>Most cleaning contracts are judged by how a floor looks at 7am. Ours is judged by ATP readings, a scored audit, and a monthly report you can put in front of your infection prevention committee.</p>
+    </div>
+
+    <div class="vgrid">
+      <div class="steps">
+        <div class="step">
+          <span class="num"></span>
+          <div><h3>ATP testing on high-touch surfaces</h3><p>Swab readings on a set schedule against a written pass threshold, logged by room rather than by building.</p></div>
+        </div>
+        <div class="step">
+          <span class="num"></span>
+          <div><h3>Scored supervisor audits</h3><p>The named site supervisor audits to a fixed checklist. Score, date and auditor are all recorded.</p></div>
+        </div>
+        <div class="step">
+          <span class="num"></span>
+          <div><h3>Monthly quality report</h3><p>One document per site: ATP pass rate, audit score, open issues, training currency. Sample shown alongside.</p></div>
+        </div>
+        <div class="step">
+          <span class="num"></span>
+          <div><h3>How issues get fixed</h3><p>A failed reading opens a corrective action with an owner and a re-test date, and stays on the report until the re-test passes.</p></div>
+        </div>
+      </div>
+
+      <div class="report">
+        <div class="rep-hd">
+          <div>
+            <b>Monthly quality report</b>
+            <span class="tnum">Site 04 &middot; Medical Office Building &middot; September 2026</span>
+          </div>
+          <span class="pill">Sample</span>
+        </div>
+        <div class="rep-body">
+          <div class="bar" style="--w:97%">
+            <span class="bl"><span>ATP pass rate, high-touch</span><b class="tnum">97%</b></span>
+            <span class="tr"><span class="fl"></span></span>
+          </div>
+          <div class="bar" style="--w:94%">
+            <span class="bl"><span>Supervisor audit score</span><b class="tnum">94 / 100</b></span>
+            <span class="tr"><span class="fl" style="animation-delay:.12s"></span></span>
+          </div>
+          <div class="bar amber" style="--w:66%">
+            <span class="bl"><span>Corrective actions closed in month</span><b class="tnum">2 of 3</b></span>
+            <span class="tr"><span class="fl" style="animation-delay:.24s"></span></span>
+          </div>
+          <div class="bar" style="--w:100%">
+            <span class="bl"><span>Technician training currency</span><b class="tnum">100%</b></span>
+            <span class="tr"><span class="fl" style="animation-delay:.36s"></span></span>
+          </div>
+        </div>
+        <div class="rep-ft">One open action carried into October with a named owner and a re-test date.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cov">
+  <div class="wrap sec">
+    <div>
+      <span class="kicker">Coverage</span>
+      <h2 style="font-size:clamp(28px,3.1vw,42px); margin-top:16px; letter-spacing:-.038em">Service delivered in 20 states.</h2>
+      <p style="margin-top:20px; font-size:17px; max-width:42ch">Two offices, one standard. Wherever the site is, the supervisor is named and the report is the same.</p>
+      <div class="cov-key">
+        <span><i style="background:var(--green)"></i>Office</span>
+        <span><i style="background:#9FCDB1"></i>Service delivered</span>
+        <span><i style="background:#E4E1D8"></i>Not yet served</span>
+      </div>
+      <div class="offices">
+        <div class="office"><b>Corporate office</b><span>Dallas, TX</span></div>
+        <div class="office"><b>Mid-Atlantic office</b><span>Winchester, VA</span></div>
+      </div>
+    </div>
+    <div><!--USMAP--></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap" style="padding-bottom:clamp(60px,7.5vw,112px)">
+    <div class="held">
+      <span class="pill warn">Designed, unpublished</span>
+      <h3>Client references</h3>
+      <p>This section is built and styled, and stays switched off until KCE supplies real quotes with written permission. No client name or logo appears without approval.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <div>
+      <span class="kicker" style="color:#A9E8C2">Next step</span>
+      <h2>Request a facility risk assessment.</h2>
+      <p>Tell us the facility type, the number of sites and the states involved. We will walk the risk, not quote a square-foot rate.</p>
+    </div>
+    <div class="cta-side">
+      <a class="btn lg" href="#">Request an assessment <span class="arw">&rarr;</span></a>
+      <a class="tel" href="tel:+19725213360"><small style="color:#A9E8C2">National</small>(972) 521&#8209;3360</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="fbrand">
+        <a class="brand" href="#">
+          <svg class="mark" viewBox="0 0 36 40" aria-hidden="true">
+            <path d="M18 1.8 34 7.4v14C34 29.8 27.3 36.4 18 38.4 8.7 36.4 2 29.8 2 21.4v-14Z" fill="none" stroke="#7FD39B" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M11 19.6 18 12.6l7 7M11 26.6l7-7 7 7" fill="none" stroke="#7FD39B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="wm"><b>Knight Clean</b><span>Enterprises</span></span>
+        </a>
+        <p>Healthcare-grade facility services, delivered in 20 states. National reach. Local accountability.</p>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">Healthcare</a></li>
+          <li><a href="#">Multi-site retail and pharmacy</a></li>
+          <li><a href="#">Labs and life sciences</a></li>
+          <li><a href="#">Commercial and education</a></li>
+          <li><a href="#">Critical facilities</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">Quality &amp; Verification</a></li>
+          <li><a href="#">Credentials &amp; Training</a></li>
+          <li><a href="#">Case Studies</a></li>
+          <li><a href="#">Leadership</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+19725213360">(972) 521&#8209;3360</a></li>
+          <li><a href="#">Corporate office: Dallas, TX</a></li>
+          <li><a href="#">Mid-Atlantic office: Winchester, VA</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbot">
+      <span>&copy; 2026 Knight Clean Enterprises. All rights reserved.</span>
+      <span>Direction B &middot; The Corridor &middot; concept for KCE review</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

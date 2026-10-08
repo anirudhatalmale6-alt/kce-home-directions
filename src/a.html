@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KCE &middot; Direction A &middot; The Record</title>
+<style>
+/*FONT*/
+
+:root{
+  --ink:#0A1A14;
+  --ink-2:#15291F;
+  --body:#3D4A44;
+  --muted:#65726C;
+  --line:#DCE2DE;
+  --line-2:#EDF0EE;
+  --paper:#FFFFFF;
+  --paper-2:#F7F9F7;
+  --green:#12803C;
+  --green-ink:#0C5C2B;
+  --green-wash:#EAF4EE;
+  --amber:#7D5F0F;
+  --amber-wash:#F7F1DF;
+
+  --gut: clamp(20px, 5vw, 64px);
+  --max: 1280px;
+  --rule: 1px solid var(--line);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--body);
+  font-family:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16px; line-height:1.62;
+  font-feature-settings:"ss01","cv05";
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{max-width:100%}
+a{color:inherit}
+h1,h2,h3,h4{color:var(--ink); margin:0; font-weight:600; letter-spacing:-0.025em; line-height:1.08}
+p{margin:0}
+
+.wrap{max-width:var(--max); margin:0 auto; padding-inline:var(--gut)}
+
+/* numerals that line up in a column, the whole point of a proof table */
+.tnum{font-variant-numeric:tabular-nums lining-nums}
+
+/* --- the spec-document label used throughout --- */
+.lab{
+  font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--muted); display:flex; align-items:center; gap:10px;
+}
+.lab::before{
+  content:""; width:18px; height:1px; background:var(--green); flex:none;
+}
+.lab.no-rule::before{display:none}
+
+/* ============ HEADER ============ */
+.topbar{
+  background:var(--ink); color:#C8D3CD; font-size:12.5px; letter-spacing:.03em;
+}
+.topbar .wrap{display:flex; gap:24px; align-items:center; justify-content:space-between; min-height:38px; flex-wrap:wrap}
+.topbar strong{color:#fff; font-weight:500}
+.topbar .locs{display:flex; gap:18px; flex-wrap:wrap}
+.lang{display:flex; gap:2px; align-items:center}
+.lang a{text-decoration:none; padding:2px 7px; border-radius:3px; font-weight:500}
+.lang a[aria-current]{background:rgba(255,255,255,.14); color:#fff}
+
+header.site{position:sticky; top:0; z-index:60; background:rgba(255,255,255,.93); backdrop-filter:blur(10px) saturate(1.3); border-bottom:var(--rule)}
+header.site .wrap{display:flex; align-items:center; gap:clamp(18px,3vw,44px); min-height:76px}
+.brand{display:flex; align-items:center; gap:11px; text-decoration:none; flex:none}
+.brand .mark{width:34px; height:38px; flex:none}
+.brand .wm{display:flex; flex-direction:column; line-height:1}
+.brand .wm b{font-size:17px; font-weight:700; color:var(--ink); letter-spacing:-.02em}
+.brand .wm span{font-size:9.5px; letter-spacing:.17em; text-transform:uppercase; color:var(--muted); margin-top:4px; font-weight:600}
+
+nav.main{display:flex; gap:clamp(14px,1.8vw,28px); margin-left:auto; align-items:center}
+nav.main a{
+  text-decoration:none; font-size:14.5px; font-weight:500; color:var(--ink-2);
+  padding:6px 0; position:relative; white-space:nowrap;
+}
+nav.main a::after{content:""; position:absolute; left:0; right:100%; bottom:0; height:1.5px; background:var(--green); transition:right .28s cubic-bezier(.2,.7,.3,1)}
+nav.main a:hover::after{right:0}
+nav.main a[aria-current]::after{right:0}
+
+.hdr-end{display:flex; align-items:center; gap:18px; flex:none}
+.tel{text-decoration:none; font-size:14.5px; font-weight:600; color:var(--ink); white-space:nowrap}
+.tel small{display:block; font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); font-weight:600; margin-bottom:1px}
+
+.btn{
+  display:inline-flex; align-items:center; gap:9px; text-decoration:none; white-space:nowrap;
+  background:var(--green); color:#fff; font-weight:600; font-size:14.5px;
+  padding:13px 20px; border:1px solid var(--green); border-radius:2px;
+  transition:background .2s, transform .2s;
+}
+.btn:hover{background:var(--green-ink); transform:translateY(-1px)}
+.btn .arw{transition:transform .25s}
+.btn:hover .arw{transform:translateX(3px)}
+.btn.ghost{background:transparent; color:var(--ink); border-color:var(--line)}
+.btn.ghost:hover{background:var(--paper-2); border-color:var(--ink); transform:none}
+.btn.lg{padding:16px 26px; font-size:15.5px}
+.btn.inv{background:#fff; color:var(--ink); border-color:#fff}
+.btn.inv:hover{background:#E8EFE9}
+
+.burger{display:none; margin-left:auto; width:42px; height:42px; border:var(--rule); background:#fff; border-radius:2px; position:relative; cursor:pointer}
+.burger i{position:absolute; left:11px; right:11px; height:1.5px; background:var(--ink)}
+.burger i:nth-child(1){top:14px} .burger i:nth-child(2){top:20px} .burger i:nth-child(3){top:26px}
+
+/* ============ HERO ============ */
+.hero{border-bottom:var(--rule); background:
+  linear-gradient(180deg,#fff 0%, var(--paper-2) 100%);
+  position:relative; overflow:hidden}
+/* faint engineering grid, the texture of a spec sheet */
+.hero::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:linear-gradient(var(--line-2) 1px,transparent 1px),linear-gradient(90deg,var(--line-2) 1px,transparent 1px);
+  background-size:72px 72px;
+  mask-image:radial-gradient(120% 90% at 85% 0%, #000 0%, transparent 72%);
+  -webkit-mask-image:radial-gradient(120% 90% at 85% 0%, #000 0%, transparent 72%);
+}
+.hero .wrap{position:relative; display:grid; grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr); gap:clamp(32px,5vw,72px); padding-block:clamp(52px,7vw,92px) clamp(44px,6vw,72px); align-items:start}
+
+.eyebrow{
+  display:inline-flex; align-items:center; gap:9px; background:var(--green-wash); color:var(--green-ink);
+  border:1px solid #CFE6D8; border-radius:2px; padding:7px 12px;
+  font-size:11.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+}
+.eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--green); flex:none; position:relative}
+.eyebrow .dot::after{content:""; position:absolute; inset:-4px; border-radius:50%; border:1px solid var(--green); opacity:.45; animation:pulse 2.6s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.6); opacity:.6} 70%{transform:scale(1.5); opacity:0} 100%{opacity:0}}
+
+h1{
+  font-size:clamp(36px,5.1vw,63px); line-height:1.04; letter-spacing:-.035em; font-weight:650;
+  margin:22px 0 0; text-wrap:balance;
+}
+h1 .acc{
+  color:var(--green-ink); position:relative; white-space:nowrap;
+}
+h1 .acc::after{
+  content:""; position:absolute; left:0; right:0; bottom:.04em; height:.055em; background:var(--green); opacity:.28;
+}
+.sub{font-size:clamp(16.5px,1.5vw,19px); line-height:1.58; margin-top:22px; max-width:42ch; color:var(--body)}
+.hero-cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:30px}
+.hero-note{margin-top:18px; font-size:13px; color:var(--muted)}
+
+/* the hero's right side: a proof table, not a photograph */
+.record{
+  border:var(--rule); background:#fff; border-radius:3px;
+  box-shadow:0 1px 0 rgba(10,26,20,.03), 0 18px 44px -28px rgba(10,26,20,.3);
+  overflow:hidden;
+}
+.record-hd{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 18px; border-bottom:var(--rule); background:var(--paper-2)}
+.record-hd .t{font-size:12px; font-weight:700; letter-spacing:.11em; text-transform:uppercase; color:var(--ink)}
+.record-hd .s{font-size:11px; color:var(--muted); letter-spacing:.06em}
+.record dl{margin:0}
+.rrow{display:grid; grid-template-columns:1fr auto; gap:16px; align-items:baseline; padding:17px 18px; border-bottom:1px solid var(--line-2)}
+.rrow:last-child{border-bottom:0}
+.rrow dt{font-size:13.5px; color:var(--body)}
+.rrow dd{margin:0; font-size:clamp(24px,2.6vw,32px); font-weight:650; color:var(--ink); letter-spacing:-.03em; line-height:1}
+.rrow dd em{font-style:normal; font-size:.5em; font-weight:600; color:var(--muted); letter-spacing:0; margin-left:3px}
+.record-ft{padding:13px 18px; background:var(--paper-2); border-top:var(--rule); font-size:12px; color:var(--muted); display:flex; gap:8px; align-items:center}
+
+/* ============ CREDENTIALS STRIP ============ */
+.credstrip{background:var(--ink); color:#D4DED8; border-bottom:var(--rule)}
+.credstrip .wrap{display:flex; gap:clamp(16px,2.6vw,38px); align-items:center; flex-wrap:wrap; padding-block:17px}
+.credstrip .ttl{font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#7D9289; flex:none}
+.credstrip ul{display:flex; gap:clamp(14px,2.4vw,32px); list-style:none; margin:0; padding:0; flex-wrap:wrap; align-items:center}
+.credstrip a{text-decoration:none; font-size:13.5px; display:flex; align-items:center; gap:8px; color:#E4EBE7; transition:color .2s}
+.credstrip a:hover{color:#fff}
+.credstrip a::before{content:""; width:5px; height:5px; background:var(--green); transform:rotate(45deg); flex:none}
+.credstrip .prog::before{background:transparent; border:1px solid #9FB2A9}
+.credstrip .prog{color:#9FB2A9}
+
+/* ============ SECTION FRAME ============ */
+section{border-bottom:var(--rule)}
+.sec{padding-block:clamp(56px,7vw,96px)}
+.sec-hd{display:grid; grid-template-columns:minmax(0,.44fr) minmax(0,.56fr); gap:clamp(24px,4vw,56px); align-items:end; margin-bottom:clamp(32px,4vw,52px)}
+.sec-hd h2{font-size:clamp(27px,3.3vw,42px); letter-spacing:-.03em; margin-top:14px; text-wrap:balance}
+.sec-hd .say{font-size:16px; line-height:1.6; max-width:52ch}
+.sec-hd .say p + p{margin-top:12px}
+
+/* ============ SERVICES (healthcare preview) ============ */
+.svcs{border-top:var(--rule); border-left:var(--rule)}
+.svcs{display:grid; grid-template-columns:repeat(3,1fr)}
+.svc{
+  border-right:var(--rule); border-bottom:var(--rule); padding:clamp(24px,2.6vw,34px);
+  background:#fff; position:relative; text-decoration:none; display:block;
+  transition:background .25s;
+}
+.svc::after{content:""; position:absolute; left:0; top:0; width:2px; height:0; background:var(--green); transition:height .32s cubic-bezier(.2,.7,.3,1)}
+.svc:hover{background:var(--paper-2)}
+.svc:hover::after{height:100%}
+.svc .n{font-size:11.5px; font-weight:700; letter-spacing:.1em; color:var(--muted); display:block}
+.svc h3{font-size:19px; margin:16px 0 10px; letter-spacing:-.02em; line-height:1.22}
+.svc p{font-size:14.5px; line-height:1.55}
+.svc .go{margin-top:18px; font-size:13px; font-weight:600; color:var(--green-ink); display:flex; align-items:center; gap:7px}
+.svc .go .arw{transition:transform .25s}
+.svc:hover .go .arw{transform:translateX(4px)}
+.svc.wide{grid-column:span 2; background:var(--paper-2)}
+.svc.wide h3{font-size:21px}
+
+/* ============ INDUSTRIES ============ */
+.inds{display:grid; grid-template-columns:repeat(5,1fr); gap:0; border-left:var(--rule); border-top:var(--rule)}
+.ind{
+  border-right:var(--rule); border-bottom:var(--rule); padding:clamp(22px,2.3vw,30px) clamp(18px,1.8vw,24px);
+  text-decoration:none; display:flex; flex-direction:column; gap:14px; background:#fff;
+  transition:background .25s, transform .25s;
+}
+.ind:hover{background:var(--ink); transform:translateY(-2px)}
+.ind:hover h3,.ind:hover p,.ind:hover .go{color:#fff}
+.ind:hover .ic{border-color:#3C5A4C; background:#173024}
+.ind:hover .ic svg{stroke:var(--green)}
+.ic{width:42px; height:42px; border:var(--rule); border-radius:2px; display:grid; place-items:center; flex:none; transition:.25s}
+.ic svg{width:21px; height:21px; stroke:var(--green-ink); fill:none; stroke-width:1.45; stroke-linecap:round; stroke-linejoin:round; transition:.25s}
+.ind h3{font-size:16px; letter-spacing:-.015em; line-height:1.25; transition:color .25s}
+.ind p{font-size:13.5px; line-height:1.5; transition:color .25s; margin-top:-4px}
+.ind .go{margin-top:auto; padding-top:14px; font-size:12px; font-weight:650; letter-spacing:.05em; color:var(--green-ink); transition:color .25s}
+.ind.flag{background:var(--green-wash)}
+.ind.flag .ic{border-color:#CBE3D5; background:#fff}
+
+/* ============ VERIFY ============ */
+.verify{background:var(--paper-2)}
+.vgrid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.86fr); gap:clamp(32px,5vw,68px); align-items:start}
+.steps{counter-reset:s; border-top:var(--rule)}
+.step{display:grid; grid-template-columns:auto 1fr; gap:clamp(16px,2vw,26px); padding-block:26px; border-bottom:var(--rule); align-items:start}
+.step .num{
+  counter-increment:s; font-size:12px; font-weight:700; letter-spacing:.09em; color:var(--green-ink);
+  padding-top:4px; min-width:30px;
+}
+.step .num::before{content:"0" counter(s)}
+.step h3{font-size:19px; letter-spacing:-.02em; margin-bottom:8px}
+.step p{font-size:14.5px; line-height:1.56}
+
+/* the sample monthly quality report */
+.report{
+  background:#fff; border:var(--rule); border-radius:3px; overflow:hidden;
+  box-shadow:0 20px 48px -32px rgba(10,26,20,.4);
+  position:sticky; top:104px;
+}
+.rep-hd{padding:16px 20px; border-bottom:var(--rule); display:flex; align-items:center; justify-content:space-between; gap:12px}
+.rep-hd b{font-size:14px; color:var(--ink); letter-spacing:-.01em; display:block}
+.rep-hd div span{font-size:11.5px; color:var(--muted)}
+.pill{font-size:10.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; padding:5px 9px; border-radius:2px; background:var(--green-wash); color:var(--green-ink); border:1px solid #CFE6D8; white-space:nowrap}
+.pill.warn{background:var(--amber-wash); color:var(--amber); border-color:#E8DCBB}
+.rep-body{padding:18px 20px 20px}
+.bar{margin-bottom:15px}
+.bar:last-child{margin-bottom:0}
+.bar .bl{display:flex; justify-content:space-between; gap:12px; font-size:13px; margin-bottom:7px}
+.bar .bl b{color:var(--ink); font-weight:650}
+.bar .tr{display:block; height:6px; background:var(--line-2); border-radius:99px; overflow:hidden}
+.bar .fl{display:block; height:100%; background:var(--green); border-radius:99px; width:0; animation:grow 1.1s cubic-bezier(.2,.75,.3,1) forwards}
+.bar.amber .fl{background:#C79A1E}
+@keyframes grow{to{width:var(--w)}}
+.rep-ft{border-top:var(--rule); padding:14px 20px; background:var(--paper-2); font-size:12.5px; color:var(--muted); display:flex; gap:9px; align-items:flex-start}
+.rep-ft svg{width:15px;height:15px;flex:none;margin-top:2px;stroke:var(--green-ink);fill:none;stroke-width:1.6}
+
+/* ============ COVERAGE ============ */
+.cov .wrap{display:grid; grid-template-columns:minmax(0,.52fr) minmax(0,1fr); gap:clamp(28px,4vw,56px); align-items:center}
+.usmap{width:100%; height:auto; display:block}
+.usmap path{fill:#E7EBE8; stroke:#fff; stroke-width:1.1; transition:fill .35s}
+.usmap path.on{fill:#BFDCC9}
+.usmap path.hq{fill:var(--green)}
+.cov-key{display:flex; gap:20px; flex-wrap:wrap; margin-top:20px; font-size:13px; color:var(--muted)}
+.cov-key i{display:inline-block; width:11px; height:11px; border-radius:2px; margin-right:7px; vertical-align:-1px}
+.offices{margin-top:24px; border-top:var(--rule)}
+.office{padding:15px 0; border-bottom:var(--rule)}
+.office b{display:block; color:var(--ink); font-size:15px; letter-spacing:-.01em}
+.office span{font-size:13.5px; color:var(--muted)}
+
+/* ============ TESTIMONIAL (held back) ============ */
+.held{border:1px dashed #C9D3CD; background:repeating-linear-gradient(135deg,#fff,#fff 13px,#FAFBFA 13px,#FAFBFA 26px); border-radius:3px; padding:clamp(26px,3.4vw,38px); text-align:center}
+.held .pill{display:inline-block; margin-bottom:14px; background:var(--amber-wash); color:var(--amber); border-color:#E8DCBB}
+.held h3{font-size:20px; margin-bottom:9px}
+.held p{font-size:14.5px; max-width:58ch; margin-inline:auto}
+
+/* ============ CTA ============ */
+.cta{background:var(--ink); color:#C8D3CD; border-bottom:0; position:relative; overflow:hidden}
+.cta::before{content:""; position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px); background-size:64px 64px; mask-image:radial-gradient(90% 100% at 20% 50%,#000,transparent 75%); -webkit-mask-image:radial-gradient(90% 100% at 20% 50%,#000,transparent 75%)}
+.cta .wrap{position:relative; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:clamp(28px,4vw,56px); align-items:center; padding-block:clamp(46px,5.6vw,74px)}
+.cta h2{color:#fff; font-size:clamp(26px,3.2vw,40px); letter-spacing:-.03em; text-wrap:balance}
+.cta p{margin-top:16px; font-size:16px; max-width:52ch}
+.cta .lab{color:#7D9289}
+.cta-side{display:flex; flex-direction:column; gap:12px; align-items:flex-start}
+.cta-side .fine{font-size:12.5px; color:#869990}
+
+/* ============ FOOTER ============ */
+footer.site{background:#071511; color:#9AAAA3; font-size:14px; border:0}
+footer.site .wrap{padding-block:clamp(40px,4.6vw,60px) 0}
+.fgrid{display:grid; grid-template-columns:minmax(0,1.3fr) repeat(3,minmax(0,1fr)); gap:clamp(24px,3vw,44px)}
+.fgrid h4{color:#fff; font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; margin-bottom:16px; font-weight:650}
+.fgrid ul{list-style:none; margin:0; padding:0; display:grid; gap:9px}
+.fgrid a{text-decoration:none; transition:color .2s}
+.fgrid a:hover{color:#fff}
+.fbrand .brand .wm b{color:#fff}
+.fbrand .brand .wm span{color:#6F827A}
+.fbrand p{margin-top:16px; font-size:14px; max-width:34ch; line-height:1.6}
+.fbot{margin-top:clamp(32px,4vw,48px); border-top:1px solid #16261F; padding-block:20px 26px; display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap; font-size:12.5px; color:#6F827A}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1080px){
+  .inds{grid-template-columns:repeat(3,1fr)}
+  .svcs{grid-template-columns:repeat(2,1fr)}
+  .svc.wide{grid-column:span 2}
+}
+@media (max-width:900px){
+  nav.main,.hdr-end .tel{display:none}
+  .burger{display:block}
+  .hdr-end{margin-left:auto}
+  .hero .wrap{grid-template-columns:1fr}
+  .sec-hd{grid-template-columns:1fr; align-items:start; gap:18px}
+  .vgrid{grid-template-columns:1fr}
+  .report{position:static}
+  .cov .wrap{grid-template-columns:1fr}
+  .cta .wrap{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:repeat(2,1fr)}
+}
+.l-sm{display:none}
+@media (max-width:760px){
+  .l-full{display:none} .l-sm{display:inline}
+}
+@media (max-width:620px){
+  .topbar .locs{display:none}
+  .inds{grid-template-columns:1fr}
+  .svcs{grid-template-columns:1fr}
+  .svc.wide{grid-column:span 1}
+  .fgrid{grid-template-columns:1fr}
+  .hdr-end .btn{padding:11px 14px; font-size:13.5px}
+  .rrow dd{font-size:26px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="locs">
+      <span>Corporate office: <strong>Dallas, TX</strong></span>
+      <span>Mid-Atlantic office: <strong>Winchester, VA</strong></span>
+    </div>
+    <div class="lang">
+      <a href="#" aria-current="true">EN</a>
+      <a href="#">ES</a>
+    </div>
+  </div>
+</div>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="#">
+      <svg class="mark" viewBox="0 0 34 38" aria-hidden="true">
+        <path d="M17 1.6 32.3 7v13.3C32.3 28.4 25.9 34.6 17 36.6 8.1 34.6 1.7 28.4 1.7 20.3V7Z" fill="none" stroke="#12803C" stroke-width="2.1" stroke-linejoin="round"/>
+        <path d="M10.4 18.6 17 12l6.6 6.6M10.4 25.4 17 18.8l6.6 6.6" fill="none" stroke="#12803C" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="wm"><b>Knight Clean</b><span>Enterprises</span></span>
+    </a>
+    <nav class="main">
+      <a href="#" aria-current="page">Healthcare</a>
+      <a href="#">Industries</a>
+      <a href="#">Quality &amp; Verification</a>
+      <a href="#">Credentials</a>
+      <a href="#">Case Studies</a>
+      <a href="#">Leadership</a>
+    </nav>
+    <div class="hdr-end">
+      <a class="tel" href="tel:+19725213360"><small>National</small>(972) 521&#8209;3360</a>
+      <a class="btn" href="#"><span class="l-full">Request an assessment</span><span class="l-sm">Assessment</span> <span class="arw">&rarr;</span></a>
+    </div>
+    <button class="burger" aria-label="Menu"><i></i><i></i><i></i></button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>Healthcare-grade &middot; 20 states</span>
+      <h1>Healthcare-grade facility services, delivered in <span class="acc">20 states</span>.</h1>
+      <p class="sub">Specialized and multi-site cleaning for organizations where standards matter, from hospitals and clinics to retail networks and critical facilities.</p>
+      <div class="hero-cta">
+        <a class="btn lg" href="#">Request a facility risk assessment <span class="arw">&rarr;</span></a>
+        <a class="btn lg ghost" href="#">See how we verify quality</a>
+      </div>
+      <p class="hero-note">National reach. Local accountability. Every site has a named KCE supervisor, the same standards and the same monthly reporting.</p>
+    </div>
+
+    <div class="record">
+      <div class="record-hd">
+        <span class="t">Operating record</span>
+        <span class="s tnum">As of Oct 2026</span>
+      </div>
+      <dl>
+        <div class="rrow"><dt>Years in business</dt><dd class="tnum">16<em>+</em></dd></div>
+        <div class="rrow"><dt>States served</dt><dd class="tnum">20</dd></div>
+        <div class="rrow"><dt>Stores in our largest multi-site program</dt><dd class="tnum">539</dd></div>
+        <div class="rrow"><dt>Named supervisor per site</dt><dd class="tnum">1</dd></div>
+      </dl>
+      <div class="record-ft">Figures are KCE operating records, available to clients on request.</div>
+    </div>
+  </div>
+</section>
+
+<div class="credstrip">
+  <div class="wrap">
+    <span class="ttl">Credentials</span>
+    <ul>
+      <li><a href="#">CHEST-certified technicians</a></li>
+      <li><a href="#">CDC Project Firstline trained</a></li>
+      <li><a href="#">OSHA compliant</a></li>
+      <li><a href="#">ASHE ICRA 2.0</a></li>
+      <li><a class="prog" href="#">CIMS in progress</a></li>
+    </ul>
+  </div>
+</div>
+
+<section>
+  <div class="wrap sec">
+    <div class="sec-hd">
+      <div>
+        <span class="lab">01 &nbsp;/&nbsp; Healthcare services</span>
+        <h2>The work hospitals cannot afford to get wrong.</h2>
+      </div>
+      <div class="say">
+        <p>Healthcare is the standard we work to, not the only market we serve. These five services are where infection prevention, construction risk and patient throughput meet, and where a named supervisor and a written record matter more than a headcount.</p>
+      </div>
+    </div>
+
+    <div class="svcs">
+      <a class="svc wide" href="#">
+        <span class="n">01</span>
+        <h3>Construction and renovation cleaning (ICRA)</h3>
+        <p>Containment-aware cleaning alongside active construction, from barrier maintenance and anteroom protocol through to final clearance before the unit reopens. Supervisors are ASHE ICRA 2.0 trained.</p>
+        <span class="go">Healthcare services <span class="arw">&rarr;</span></span>
+      </a>
+      <a class="svc" href="#">
+        <span class="n">02</span>
+        <h3>OR and terminal cleaning</h3>
+        <p>Between-case and terminal cleaning to a written sequence, with turnover timed against the OR schedule rather than against a shift.</p>
+        <span class="go">Detail <span class="arw">&rarr;</span></span>
+      </a>
+      <a class="svc" href="#">
+        <span class="n">03</span>
+        <h3>Outbreak response</h3>
+        <p>Escalated disinfection on call, with the product, contact time and room sequence recorded for infection prevention.</p>
+        <span class="go">Detail <span class="arw">&rarr;</span></span>
+      </a>
+      <a class="svc" href="#">
+        <span class="n">04</span>
+        <h3>Shared mobile equipment cleaning</h3>
+        <p>Pumps, workstations and portable imaging cleaned on a tracked cycle, so the equipment that moves between rooms stops moving contamination with it.</p>
+        <span class="go">Detail <span class="arw">&rarr;</span></span>
+      </a>
+      <a class="svc" href="#">
+        <span class="n">05</span>
+        <h3>Outpatient site standardization</h3>
+        <p>One protocol, one report and one standard across every clinic in the network, however far it sits from the main campus.</p>
+        <span class="go">Detail <span class="arw">&rarr;</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap sec">
+    <div class="sec-hd">
+      <div>
+        <span class="lab">02 &nbsp;/&nbsp; Industries served</span>
+        <h2>Same standards, applied to your sector.</h2>
+      </div>
+      <div class="say">
+        <p>Each sector gets a page written for it. The protocols, the verification and the reporting do not change.</p>
+      </div>
+    </div>
+
+    <div class="inds">
+      <a class="ind flag" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg></span>
+        <h3>Healthcare</h3>
+        <p>Hospitals, surgical centres and outpatient networks.</p>
+        <span class="go">FLAGSHIP &rarr;</span>
+      </a>
+      <a class="ind" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 9h18l-1.5 11H4.5Z"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/></svg></span>
+        <h3>Multi-site retail and pharmacy</h3>
+        <p>539 stores across 20 states on one cooler programme.</p>
+        <span class="go">PROVEN &rarr;</span>
+      </a>
+      <a class="ind" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M9 3v7L4 20a1.6 1.6 0 0 0 1.4 2h13.2A1.6 1.6 0 0 0 20 20l-5-10V3"/><path d="M8 3h8M7.2 14h9.6"/></svg></span>
+        <h3>Labs and life sciences</h3>
+        <p>Controlled environments and documented cycles.</p>
+        <span class="go">VIEW &rarr;</span>
+      </a>
+      <a class="ind" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M10 21v-6h4v6"/></svg></span>
+        <h3>Commercial and education</h3>
+        <p>Offices and campuses held to clinical standards.</p>
+        <span class="go">VIEW &rarr;</span>
+      </a>
+      <a class="ind" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5.2 3.8 9.4 9 10 5.2-.6 9-4.8 9-10V6Z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <h3>Critical facilities</h3>
+        <p>Data centres and utilities with access control.</p>
+        <span class="go">VIEW &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="verify">
+  <div class="wrap sec">
+    <div class="sec-hd">
+      <div>
+        <span class="lab">03 &nbsp;/&nbsp; Quality &amp; verification</span>
+        <h2>We measure the clean, then hand you the record.</h2>
+      </div>
+      <div class="say">
+        <p>Most cleaning contracts are judged by how a floor looks at 7am. Ours is judged by ATP readings, a scored audit and a monthly report you can put in front of your infection prevention committee.</p>
+      </div>
+    </div>
+
+    <div class="vgrid">
+      <div class="steps">
+        <div class="step">
+          <span class="num"></span>
+          <div>
+            <h3>ATP testing on high-touch surfaces</h3>
+            <p>Swab readings taken on a set schedule against a written pass threshold. Readings are logged by room, not by building.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num"></span>
+          <div>
+            <h3>Scored supervisor audits</h3>
+            <p>The named site supervisor audits to a fixed checklist. The score, the date and the auditor are all recorded.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num"></span>
+          <div>
+            <h3>Monthly quality report</h3>
+            <p>One document per site covering ATP pass rate, audit score, open issues and training currency. Sample shown alongside.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num"></span>
+          <div>
+            <h3>How issues get fixed</h3>
+            <p>A failed reading opens a corrective action with an owner and a re-test date. It stays on the report until the re-test passes.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="report">
+        <div class="rep-hd">
+          <div>
+            <b>Monthly quality report</b>
+            <span class="tnum">Site 04 &middot; Medical Office Building &middot; September 2026</span>
+          </div>
+          <span class="pill">Sample</span>
+        </div>
+        <div class="rep-body">
+          <div class="bar" style="--w:97%">
+            <span class="bl"><span>ATP pass rate, high-touch</span><b class="tnum">97%</b></span>
+            <span class="tr"><span class="fl"></span></span>
+          </div>
+          <div class="bar" style="--w:94%">
+            <span class="bl"><span>Supervisor audit score</span><b class="tnum">94 / 100</b></span>
+            <span class="tr"><span class="fl" style="animation-delay:.12s"></span></span>
+          </div>
+          <div class="bar amber" style="--w:66%">
+            <span class="bl"><span>Corrective actions closed in month</span><b class="tnum">2 of 3</b></span>
+            <span class="tr"><span class="fl" style="animation-delay:.24s"></span></span>
+          </div>
+          <div class="bar" style="--w:100%">
+            <span class="bl"><span>Technician training currency</span><b class="tnum">100%</b></span>
+            <span class="tr"><span class="fl" style="animation-delay:.36s"></span></span>
+          </div>
+        </div>
+        <div class="rep-ft">
+          <svg viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5.2 3.8 9.4 9 10 5.2-.6 9-4.8 9-10V6Z"/><path d="M9 12l2 2 4-4"/></svg>
+          <span>One open action carried into October with an owner and a re-test date.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cov">
+  <div class="wrap sec">
+    <div>
+      <span class="lab">04 &nbsp;/&nbsp; Coverage</span>
+      <h2 style="font-size:clamp(27px,2.8vw,36px); margin-top:14px">Service delivered in 20 states.</h2>
+      <p style="margin-top:16px; font-size:16px; max-width:44ch">Two offices, one standard. Wherever the site is, the supervisor is named and the report is the same.</p>
+      <div class="cov-key">
+        <span><i style="background:var(--green)"></i>Office</span>
+        <span><i style="background:#BFDCC9"></i>Service delivered</span>
+        <span><i style="background:#E7EBE8"></i>Not yet served</span>
+      </div>
+      <div class="offices">
+        <div class="office"><b>Corporate office</b><span>Dallas, TX</span></div>
+        <div class="office"><b>Mid-Atlantic office</b><span>Winchester, VA</span></div>
+      </div>
+    </div>
+    <div><!--USMAP--></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap sec">
+    <div class="held">
+      <span class="pill warn">Designed, unpublished</span>
+      <h3>Client references</h3>
+      <p>This section is built and styled, and stays switched off until KCE supplies real quotes with written permission. No client name or logo appears without approval.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <div>
+      <span class="lab">05 &nbsp;/&nbsp; Next step</span>
+      <h2 style="margin-top:14px">Request a facility risk assessment.</h2>
+      <p>Tell us the facility type, the number of sites and the states involved. We will walk the risk, not quote a square-foot rate.</p>
+    </div>
+    <div class="cta-side">
+      <a class="btn lg inv" href="#">Request an assessment <span class="arw">&rarr;</span></a>
+      <a class="tel" style="color:#fff" href="tel:+19725213360"><small style="color:#7D9289">National</small>(972) 521&#8209;3360</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="fbrand">
+        <a class="brand" href="#">
+          <svg class="mark" viewBox="0 0 34 38" aria-hidden="true">
+            <path d="M17 1.6 32.3 7v13.3C32.3 28.4 25.9 34.6 17 36.6 8.1 34.6 1.7 28.4 1.7 20.3V7Z" fill="none" stroke="#2FA85A" stroke-width="2.1" stroke-linejoin="round"/>
+            <path d="M10.4 18.6 17 12l6.6 6.6M10.4 25.4 17 18.8l6.6 6.6" fill="none" stroke="#2FA85A" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="wm"><b>Knight Clean</b><span>Enterprises</span></span>
+        </a>
+        <p>Healthcare-grade facility services, delivered in 20 states. National reach. Local accountability.</p>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">Healthcare</a></li>
+          <li><a href="#">Multi-site retail and pharmacy</a></li>
+          <li><a href="#">Labs and life sciences</a></li>
+          <li><a href="#">Commercial and education</a></li>
+          <li><a href="#">Critical facilities</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">Quality &amp; Verification</a></li>
+          <li><a href="#">Credentials &amp; Training</a></li>
+          <li><a href="#">Case Studies</a></li>
+          <li><a href="#">Leadership</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+19725213360">(972) 521&#8209;3360</a></li>
+          <li><a href="#">Corporate office: Dallas, TX</a></li>
+          <li><a href="#">Mid-Atlantic office: Winchester, VA</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbot">
+      <span>&copy; 2026 Knight Clean Enterprises. All rights reserved.</span>
+      <span>Direction A &middot; The Record &middot; concept for KCE review</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
