@@ -5,7 +5,8 @@ import pathlib, sys
 from playwright.sync_api import sync_playwright
 
 ROOT = pathlib.Path(__file__).parent / "concepts"
-TARGETS = [("A", "concept-a-the-record.html"), ("B", "concept-b-the-corridor.html")]
+TARGETS = [("A", "concept-a-the-record.html"), ("B", "concept-b-the-corridor.html"),
+           ("C", "kce-home-page.html")]
 fails = []
 
 

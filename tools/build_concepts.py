@@ -17,6 +17,27 @@ assert len(SERVED) == 20, len(SERVED)
 RAW_MAP = (CON / "usmap.svg").read_text()
 
 
+OFFICE_PINS = [
+    ("Dallas, TX", "Corporate office", 495.1, 443.1),
+    ("Winchester, VA", "Mid-Atlantic office", 824.7, 264.3),
+]
+
+
+def map_plain():
+    """Coverage without naming states: every state neutral, only the two
+    offices called out. KCE did not want the 20 listed, because a buyer in
+    state 21 would read the list as a rejection."""
+    pins = "".join(
+        f'<g class="pin" transform="translate({x},{y})">'
+        f'<circle class="halo" r="30"/><circle class="ring" r="11"/>'
+        f'<circle class="dot" r="5"/>'
+        f'<text y="-30">{name}</text>'
+        f'<text class="sub" y="-8">{role}</text></g>'
+        for name, role, x, y in OFFICE_PINS
+    )
+    return RAW_MAP.replace("</svg>", f'<g class="pins">{pins}</g>\n</svg>')
+
+
 def map_svg(extra_class=""):
     """Stamp .hq / .on onto the right state paths."""
     def sub(m):
@@ -42,6 +63,7 @@ def font_face(family, filename, weight):
 BUILDS = [
     ("a.html", "concept-a-the-record.html", font_face("Instrument Sans", "InstrumentSans.woff2", "400 700")),
     ("b.html", "concept-b-the-corridor.html", font_face("Manrope", "Manrope.woff2", "200 800")),
+    ("c.html", "kce-home-page.html", font_face("Instrument Sans", "InstrumentSans.woff2", "400 700")),
 ]
 
 for src, out, face in BUILDS:
@@ -49,5 +71,6 @@ for src, out, face in BUILDS:
     html = html.replace("/*FONT*/", face)
     html = html.replace("<!--USMAP-->", map_svg())
     html = html.replace("<!--MAPBG-->", map_svg("mapbg"))
+    html = html.replace("<!--USMAPC-->", map_plain())
     (CON / out).write_text(html)
     print(f"{out}: {len(html)/1024:.0f} KB")
